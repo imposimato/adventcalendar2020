@@ -1,6 +1,9 @@
 const fs = require('fs');
 
-const array = fs.readFileSync('01.txt').toString().split("\n");
+const array = fs.readFileSync('01.txt')
+    .toString()
+    .split("\n")
+    .map(val => parseInt(val));
 
 // Cast Array as obj to reduce bigO
 function castToObj(inputs) {
@@ -19,23 +22,22 @@ function castToObj(inputs) {
 function findPair(values, target) {
     const object = castToObj(values);
     for (const v of values) {
-        const int = parseInt(v);
-        const diff = target - int;
-        if (object[diff.toString()]) {
-            return [int, diff];
+        const diff = target - v;
+        if (object[diff] && diff + v === target) {
+            return [v, diff];
         }
     }
-    return null;
+    return [];
 }
 
 function findTriplets(inputs, sum) {
     for (let i = 0; i < inputs.length; i++) {
-        const currDiff = sum - parseInt(inputs[i]);
+        const currDiff = sum - inputs[i];
         for (let j = i + 1; j < inputs.length; j++) {
             let tempArr = inputs.slice(j);
             const pair = findPair(tempArr, currDiff);
-            if (pair) {
-                return [parseInt(inputs[i]), ...pair];
+            if (pair.length === 2) {
+                return [inputs[i], ...pair];
             }
         }
     }
