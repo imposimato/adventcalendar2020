@@ -1,28 +1,23 @@
 const fs = require('fs');
 
-const inputs = fs.readFileSync('02.txt').toString().split('\n');
+const pattern = /(?<pos1>\d+)-(?<pos2>\d+) (?<key>\w): (?<pass>\w+)/;
 
-let resultPolicyOne = 0;
-let resultPolicyTwo = 0;
-for (const line of inputs) {
-    const res = line.split(': ');
-    // Extract patern and key;
-    const paternAndKey = res[0].split(' ');
-    const repetition = paternAndKey[0].split('-').map(v => parseInt(v));
-    const key = paternAndKey[1];
-    const password = res[1];
-    let countChars = 0;
+const input = fs.readFileSync('./02.txt')
+    .toString('utf-8')
+    .split("\n")
+    .filter(row => row)
+    .map(row => pattern.exec(row).groups)
 
-    if (password) {
-        for (const c of password) {
-            if (c && c.toString() === key) {
-                countChars++;
-            }
-        }
-    }
-    countChars >= repetition[0] && countChars <= repetition[1] && resultPolicyOne++;
-    password && (password[repetition[0] - 1] === key) ^ (password[repetition[1] - 1] === key) && resultPolicyTwo++;
-}
+const correctPasswordsPolicy1 = input.filter((record) => {
+    console.log(record.pass.split(record.key));
+    const charCount = record.pass.split(record.key).length -1;
+    return charCount >= record.pos1 && charCount <= record.pos2;
+});
 
-console.log(resultPolicyOne);
-console.log(resultPolicyTwo);
+const correctPasswordsPolicy2 = input.filter((record) =>
+    record.pass[record.pos1 - 1] === record.key ^
+    record.pass[record.pos2 - 1] === record.key
+);
+
+console.log(correctPasswordsPolicy1.length);
+console.log(correctPasswordsPolicy2.length);
