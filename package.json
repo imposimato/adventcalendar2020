@@ -4,5 +4,8 @@
   "main": "index.js",
   "repository": "https://github.com/imposimato/adventcalendar2020.git",
   "author": "Luiz Imposimato <imposimato.luiz@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.20"
+  }
 }
