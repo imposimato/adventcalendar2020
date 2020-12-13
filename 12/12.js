@@ -38,21 +38,16 @@ console.log('Part One', Math.abs(northSouth) + Math.abs(eastWest));
 let waypoint = {north: 1, east: 10};
 let position = {north: 0, east: 0};
 input.forEach(instr => {
-    if (instr.dir.match(/L|R/)) {
-        const {north, east} = waypoint;
-        if (instr.value === 180) {
-            waypoint.east *= -1;
-            waypoint.north *= -1;
-        }
-        if ((instr.value === 90 && instr.dir === 'R') ||
-            (instr.value === 270 && instr.dir === 'L')) {
-            waypoint.east = north;
-            waypoint.north = -east;
-        }
-        if ((instr.value === 90 && instr.dir === 'L') ||
-            (instr.value === 270 && instr.dir === 'R')) {
-            waypoint.east = -north;
-            waypoint.north = east;
+    if (instr.dir.match(/R|L/)) {
+        for (let angle = 90; angle <= instr.value; angle += 90) {
+            let {north, east} = waypoint;
+            if (instr.dir === 'R') {
+                waypoint.east = north;
+                waypoint.north = -east;
+            } else {
+                waypoint.east = -north;
+                waypoint.north = east;
+            }
         }
     }
     if (instr.dir.match(/N|S/)) {
@@ -66,7 +61,7 @@ input.forEach(instr => {
         position.east += waypoint.east * instr.value;
     }
 });
-
+console.log(position);
 console.log('Part two: ', Math.abs(position.north) + Math.abs(position.east));
 
 
